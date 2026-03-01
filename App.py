@@ -6,6 +6,7 @@ from kivy.animation import Animation
 #Initilize Screens
 class WelcomeScreen(Screen): pass
 class SignInScreen(Screen): pass
+class InfoScreen(Screen): pass
 class OnBoardingScreen(Screen): pass
 class PlanScreen(Screen): pass
 class MainScreen(Screen):
