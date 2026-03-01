@@ -1,48 +1,56 @@
+import random
+from kivy.lang import Builder
+from kivy.uix.widget import Widget
+from kivy.properties import ListProperty
+from kivy.clock import Clock
+from kivy.graphics import Color, Rectangle
 from kivymd.app import MDApp
-from kivy.uix.screenmanager import Screen
-from kivymd.color_definitions import colors
-from kivy.animation import Animation
+from kivymd.uix.screen import MDScreen
 
-#Initilize Screens
-class WelcomeScreen(Screen): pass
-class SignInScreen(Screen): pass
-class OnBoardingScreen(Screen): pass
-class PlanScreen(Screen): pass
-class MainScreen(Screen):
-    def on_enter(self):
-        # Reset to 0 when entering the screen
-        self.ids.progress.value = 0
 
-        # Animate to 100% over 2 seconds with a 'bounce' effect
-        anim = Animation(value=100, duration=2, t='out_quad')
-        anim.start(self.ids.progress)
+class ConfettiParticle:
+    def __init__(self, width, height):
+        self.pos = [random.uniform(0, width), random.uniform(height, height + 100)]
+        self.size = [random.uniform(5, 12), random.uniform(5, 12)]
+        self.color = [random.random(), random.random(), random.random(), 1]
+        self.speed = random.uniform(2, 5)
+        self.drift = random.uniform(-1, 1)
+
+
+class ConfettiWidget(Widget):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.particles = []
+        Clock.schedule_interval(self.update, 1 / 60)
+
+    def update(self, dt):
+        if not self.particles and self.width > 1:
+            self.particles = [ConfettiParticle(self.width, self.height) for _ in range(50)]
+
+        self.canvas.clear()
+        with self.canvas:
+            for p in self.particles:
+                p.pos[1] -= p.speed
+                p.pos[0] += p.drift
+
+                # Reset particle to top if it goes off-screen
+                if p.pos[1] < 0:
+                    p.pos[1] = self.height
+                    p.pos[0] = random.uniform(0, self.width)
+
+                Color(*p.color)
+                Rectangle(pos=p.pos, size=p.size)
+
+
+class WelcomeScreen(MDScreen):
     pass
-class WrappedScreen(Screen): pass
 
 
 class ConfettiCashApp(MDApp):
     def build(self):
-        # 1. HIJACK TEAL: Replace the '500' (main) and '700' (dark) shades
-        # with your specific Green (#A2C8C8)
-        colors["Teal"]["500"] = "A2C8C8"
-        colors["Teal"]["700"] = "8BAEAE"  # A slightly darker version of your green
-
-        # 2. HIJACK AMBER: Replace the '500' shade with your Tan (#EFEBE2)
-        colors["Amber"]["500"] = "EFEBE2"
-
-        # 3. Now use them normally!
-        # Every widget that uses "Primary" will now be your Green.
-        self.theme_cls.primary_palette = "Teal"
-        self.theme_cls.accent_palette = "Teal"
-        self.theme_cls.theme_style = "Light"
-
-        return  # Your Root Widget or Builder.load_file("confetticash.kv")
-
-    def on_checkbox_active(self, checkbox, value):
-        if value:
-            print("User accepted the terms!")
-        else:
-            print("User unchecked the terms!")
+        self.theme_cls.primary_palette = "DeepPurple"
+        self.theme_cls.accent_palette = "Amber"
+        return Builder.load_file("welcome.kv")
 
 
 if __name__ == "__main__":
