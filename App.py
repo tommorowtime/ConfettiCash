@@ -9,7 +9,21 @@ from kivy.clock import Clock
 #Initilize Screens
 class WelcomeScreen(Screen): pass
 class SignInScreen(Screen): pass
-class InfoScreen(Screen): pass
+
+
+class InfoScreen(Screen):
+    def update_confidence_text(self, slider_instance, value):
+        # Dictionary mapping the slider value to your specific labels
+        confidence_levels = {
+            1: "Not Confident",
+            2: "Slightly Confident",
+            3: "Somewhat Confident",
+            4: "Fairly Confident",
+            5: "Completely Confident"
+        }
+
+        # Update the text of the label in the KV file based on the slider value
+        self.ids.confidence_label.text = confidence_levels.get(int(value), "Somewhat Confident")
 class OnBoardingScreen(Screen): pass
 class PlanScreen(Screen): pass
 class MainScreen(Screen):
@@ -64,6 +78,8 @@ class ConfettiCashApp(MDApp):
             print("User accepted the terms!")
         else:
             print("User unchecked the terms!")
+
+
 
 
 if __name__ == "__main__":
