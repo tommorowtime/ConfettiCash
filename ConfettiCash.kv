@@ -476,25 +476,36 @@ ScreenManager:
                     padding: "16dp"
                     spacing: "10dp"
                     size_hint_y: None
-                    height: "120dp"
+                    height: "80dp"
                     elevation: 2
                     radius: [12, 12, 12, 12]
                     md_bg_color: app.theme_cls.bg_light
 
-                    MDLabel:
-                        text: "Loading your Confetti..."
-                        font_style: "Subtitle1"
-                        halign: "center"
-                        theme_text_color: "Primary"
-                        adaptive_height: True
+                    # --- Progress Bar & Confetti Wrapper ---
+                    MDRelativeLayout:
+                        size_hint_y: None
+                        height: "30dp" # Gives the progress bar some breathing room
 
-                    MDProgressBar:
-                        id: progress  # DO NOT CHANGE THIS ID!
-                        value: 0
-                        color: app.theme_cls.primary_color
-                        size_hint_x: 0.9
-                        pos_hint: {"center_x": 0.5}
-                        type: "determinate"
+                        MDProgressBar:
+                            id: progress
+                            value: 0
+                            color: app.theme_cls.primary_color
+                            size_hint_x: 0.9
+                            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                            type: "determinate"
+
+                        # The hidden GIF layered right on top
+                        Image:
+                            id: confetti_gif
+                            source: "confetti.gif"
+                            anim_delay: -1
+                            opacity: 0
+                            pos_hint: {"center_x": 0.9, "center_y": 0.5}
+                            
+                            # -- NEW SIZING LOGIC --
+                            size_hint: 4.5, 10       # Increased from 1.2, 5
+                            allow_stretch: True      # Forces Kivy to stretch the image
+                            keep_ratio: True         # Prevents the GIF from looking squished
 
                 # --- Next Steps ---
                 MDLabel:

@@ -2,6 +2,9 @@ from kivymd.app import MDApp
 from kivy.uix.screenmanager import Screen
 from kivymd.color_definitions import colors
 from kivy.animation import Animation
+import random
+from kivymd.uix.label import MDLabel
+from kivy.clock import Clock
 
 #Initilize Screens
 class WelcomeScreen(Screen): pass
@@ -11,13 +14,30 @@ class OnBoardingScreen(Screen): pass
 class PlanScreen(Screen): pass
 class MainScreen(Screen):
     def on_enter(self):
-        # Reset to 0 when entering the screen
+        # 1. Reset progress bar and ensure GIF is hidden when entering screen
         self.ids.progress.value = 0
+        self.ids.confetti_gif.opacity = 0
+        self.ids.confetti_gif.anim_delay = -1 
 
-        # Animate to 100% over 2 seconds with a 'bounce' effect
-        anim = Animation(value=100, duration=2, t='out_quad')
+        # 2. Start the progress bar animation
+        anim = Animation(value=100, duration=3, t='out_quad')
+        anim.bind(on_complete=self.play_lottie_gif)
         anim.start(self.ids.progress)
-    pass
+
+    def play_lottie_gif(self, *args):
+        # 3. Make the GIF visible and start playing it
+        gif = self.ids.confetti_gif
+        gif.opacity = 1
+        gif.anim_delay = 0.05  # Standard GIF frame speed (lower is faster)
+        
+        # 4. Schedule the GIF to hide again after 2.5 seconds
+        # (Change the 2.5 to match however long your GIF is)
+        Clock.schedule_once(self.hide_gif, 2.5)
+
+    def hide_gif(self, dt):
+        # 5. Hide and pause the GIF
+        self.ids.confetti_gif.opacity = 0
+        self.ids.confetti_gif.anim_delay = -1
 class WrappedScreen(Screen): pass
 
 
