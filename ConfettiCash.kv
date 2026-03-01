@@ -1,0 +1,160 @@
+ScreenManager:
+    WelcomeScreen:
+    SignInScreen:
+    OnBoardingScreen:
+    PlanScreen:
+    MainScreen:
+<WelcomeScreen>:
+    name: "welcome"
+
+    MDLabel:
+        text: "Welcome to Confetti Cash"
+        pos_hint: {"center_x": 0.87, "center_y": 0.5}
+
+    MDLabel:
+        text: "Because Every Win Needs Confetti!"
+        pos_hint: {"center_x": 0.84, "center_y": 0.43}
+
+    MDRaisedButton:
+        text: "Sign Up"
+        pos_hint: {"center_x": 0.48, "center_y": 0.35}
+        on_release: root.manager.current = "sign in"
+
+<SignInScreen>:
+    name: "sign in"
+
+    MDLabel:
+        text: "Create Account"
+        pos_hint: {"center_x": 0.925, "center_y": 0.9}
+
+    MDRaisedButton:
+        text: "Back to Home"
+        pos_hint: {"center_x": 0.5, "center_y": 0.4}
+        on_release: root.manager.current = "welcome"
+
+    MDTextField:
+        id: email_field
+        hint_text: "Enter email address:"
+        helper_text: "Example: patrick.pam@confetticash.com"
+        helper_text_mode: "on_focus"
+        icon_right: "account"
+        pos_hint: {"center_x": 0.5, "center_y": 0.8}
+
+    MDTextField:
+        id: password_field
+        hint_text: "Create password:"
+        helper_text: "Example: HelloWorld123"
+        helper_text_mode: "on_focus"
+        icon_right: "key-variant"
+        password: True  # This hides the numbers as you type
+        pos_hint: {"center_x": 0.5, "center_y": 0.7}
+
+    MDRaisedButton:
+        text: "Submit"
+        pos_hint: {"center_x": 0.5, "center_y": 0.6}
+        on_release: root.manager.current = "onboarding"
+
+<OnBoardingScreen>:
+    name: "onboarding"
+
+    # Use a layout to hold both the box and the text
+    MDBoxLayout:
+        orientation: "horizontal"
+        adaptive_size: True  # This shrinks the box to fit the content
+        spacing: "8dp"       # Space between checkbox and text
+        pos_hint: {"center_x": .5, "center_y": .5}
+
+        MDCheckbox:
+            id: my_checkbox
+            size_hint: None, None
+            pos_hint: {"center_x": 0.5, "center_y": 0.6}
+            size: "48dp", "48dp"
+            on_active: app.on_checkbox_active(*args)
+
+        MDLabel:
+            text: "I agree to the Confetti Terms"
+            adaptive_size: True
+            pos_hint: {"center_y": .5}
+
+        MDCheckbox:
+            id: my_checkbox2
+            size_hint: None, None
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            size: "48dp", "48dp"
+            on_active: app.on_checkbox_active(*args)
+
+        MDLabel:
+            text: "I DO NOT agree to the Confetti Terms"
+            adaptive_size: True
+            pos_hint: {"center_y": .4}
+
+        MDRaisedButton:
+            text: "Move on"
+            pos_hint: {"center_x": 0.5, "center_y": 0.6}
+            on_release: root.manager.current = "plan"
+
+<PlanScreen>:
+    name: "plan"
+
+    MDBoxLayout:
+        orientation: "horizontal"
+        adaptive_size: True  # This shrinks the box to fit the content
+        spacing: "8dp"       # Space between checkbox and text
+        pos_hint: {"center_x": .5, "center_y": .5}
+
+        MDCheckbox:
+            id: my_checkbox
+            size_hint: None, None
+            pos_hint: {"center_x": 0.5, "center_y": 0.6}
+            active: True
+            size: "48dp", "48dp"
+            on_active: app.on_checkbox_active(*args)
+
+        MDLabel:
+            text: "I agree to the Confetti Terms"
+            adaptive_size: True
+            pos_hint: {"center_y": .5}
+
+        MDCheckbox:
+            id: my_checkbox2
+            size_hint: None, None
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            active: True
+            size: "48dp", "48dp"
+            on_active: app.on_checkbox_active(*args)
+
+        MDLabel:
+            text: "I DO NOT agree to the Confetti Terms"
+            adaptive_size: True
+            pos_hint: {"center_y": .4}
+
+        MDRaisedButton:
+            text: "Submit"
+            pos_hint: {"center_x": 0.5, "center_y": 0.6}
+            on_release: root.manager.current = "main"
+<MainScreen>:
+    name: "main"
+
+    MDLabel:
+        text: "Loading your Confetti..."
+        halign: "center"
+        theme_text_color: "Custom"
+        text_color: app.theme_cls.primary_color
+
+    MDProgressBar:
+        id: progress
+        value: 50  # Set to 50 so you can see it halfway full
+        color: app.theme_cls.primary_color  # Your Green
+        size_hint_x: .8  # Takes up 80% of the screen width
+        pos_hint: {"center_x": 0.5, "center_y": 0.4}
+        type: "determinate"
+
+    MDLabel:
+        text:
+            "• First Step to Cash\n" \
+            "• Second Step to Glory\n" \
+            "• Third Step to Confetti"
+        markup: True
+        pos_hint: {"center_x": 0.9, "center_y": 0.8}
+        theme_text_color: "Custom"
+        text_color: app.theme_cls.primary_color
